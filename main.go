@@ -6,27 +6,23 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gitpod.gin/account"
 )
-
-type User struct {
-	Name string `json:"name" form:"name" bind:"required"`
-	Age  int    `json:"age" form:"age" bind:"required,min=6,max=100"`
-}
 
 func main() {
 	fmt.Println("hello world!!")
 	r := gin.Default()
 	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"name": "xiaosong"})
+		c.JSON(http.StatusOK, gin.H{"name ": "xiaosong"})
 	})
 	r.POST("/user", func(c *gin.Context) {
-		var user User
-		err := c.BindJSON(&user)
+		var account account.Account
+		err := c.BindJSON(&account)
 
-		if err !=  nil {
+		if err != nil {
 			log.Fatal(err.Error())
 		}
-		c.JSON(http.StatusOK, gin.H{"message": user.Name, "age": user.Age, "status":"sucess"})
+		c.JSON(http.StatusOK, gin.H{"message": account.Name, "age": account.Age, "status": "sucess"})
 	})
 	r.Run()
 }
