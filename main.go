@@ -21,11 +21,12 @@ func main() {
 	})
 	r.POST("/user", func(c *gin.Context) {
 		var user User
-		err := c.BindJSON(user)
-		if err != nil {
+		err := c.BindJSON(&user)
+
+		if err !=  nil {
 			log.Fatal(err.Error())
 		}
-		c.JSON(http.StatusOK, gin.H{"message": user.Name, "age": user.Age})
+		c.JSON(http.StatusOK, gin.H{"message": user.Name, "age": user.Age, "status":"sucess"})
 	})
 	r.Run()
 }
