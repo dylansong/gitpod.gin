@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gitpod.gin/account"
+	"gitpod.gin/ent"
 )
 
 func main() {
@@ -16,13 +16,13 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"name ": "xiaosong"})
 	})
 	r.POST("/user", func(c *gin.Context) {
-		var account account.Account
+		var account ent.Account
 		err := c.BindJSON(&account)
 
 		if err != nil {
 			log.Fatal(err.Error())
 		}
-		c.JSON(http.StatusOK, gin.H{"message": account.Name, "age": account.Age, "status": "sucess"})
+		c.JSON(http.StatusOK, gin.H{"message": account.Name})
 	})
 	r.Run()
 }
