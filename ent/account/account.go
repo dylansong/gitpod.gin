@@ -9,6 +9,8 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldAge holds the string denoting the age field in the database.
+	FieldAge = "age"
 	// Table holds the table name of the account in the database.
 	Table = "accounts"
 )
@@ -17,6 +19,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
+	FieldAge,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

@@ -253,7 +253,7 @@ func (aq *AccountQuery) Clone() *AccountQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty" form:"name"`
+//		Name string `json:"name,omitempty" form:"name" binding:"required"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -280,7 +280,7 @@ func (aq *AccountQuery) GroupBy(field string, fields ...string) *AccountGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty" form:"name"`
+//		Name string `json:"name,omitempty" form:"name" binding:"required"`
 //	}
 //
 //	client.Account.Query().

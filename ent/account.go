@@ -12,11 +12,13 @@ import (
 
 // Account is the model entity for the Account schema.
 type Account struct {
-	config `form:"-" json:"-"`
+	config `binding:"-" form:"-" json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty" form:"name"`
+	Name string `json:"name,omitempty" form:"name" binding:"required"`
+	// Age holds the value of the "age" field.
+	Age int `json:"age,omitempty" form:"age" binding:"required,gte=6,lte=100"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,7 +26,7 @@ func (*Account) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case account.FieldID:
+		case account.FieldID, account.FieldAge:
 			values[i] = new(sql.NullInt64)
 		case account.FieldName:
 			values[i] = new(sql.NullString)
@@ -54,6 +56,12 @@ func (a *Account) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				a.Name = value.String
+			}
+		case account.FieldAge:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field age", values[i])
+			} else if value.Valid {
+				a.Age = int(value.Int64)
 			}
 		}
 	}
@@ -85,6 +93,8 @@ func (a *Account) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", a.ID))
 	builder.WriteString(", name=")
 	builder.WriteString(a.Name)
+	builder.WriteString(", age=")
+	builder.WriteString(fmt.Sprintf("%v", a.Age))
 	builder.WriteByte(')')
 	return builder.String()
 }

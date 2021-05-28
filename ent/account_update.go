@@ -32,6 +32,19 @@ func (au *AccountUpdate) SetName(s string) *AccountUpdate {
 	return au
 }
 
+// SetAge sets the "age" field.
+func (au *AccountUpdate) SetAge(i int) *AccountUpdate {
+	au.mutation.ResetAge()
+	au.mutation.SetAge(i)
+	return au
+}
+
+// AddAge adds i to the "age" field.
+func (au *AccountUpdate) AddAge(i int) *AccountUpdate {
+	au.mutation.AddAge(i)
+	return au
+}
+
 // Mutation returns the AccountMutation object of the builder.
 func (au *AccountUpdate) Mutation() *AccountMutation {
 	return au.mutation
@@ -113,6 +126,20 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: account.FieldName,
 		})
 	}
+	if value, ok := au.mutation.Age(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: account.FieldAge,
+		})
+	}
+	if value, ok := au.mutation.AddedAge(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: account.FieldAge,
+		})
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{account.Label}
@@ -135,6 +162,19 @@ type AccountUpdateOne struct {
 // SetName sets the "name" field.
 func (auo *AccountUpdateOne) SetName(s string) *AccountUpdateOne {
 	auo.mutation.SetName(s)
+	return auo
+}
+
+// SetAge sets the "age" field.
+func (auo *AccountUpdateOne) SetAge(i int) *AccountUpdateOne {
+	auo.mutation.ResetAge()
+	auo.mutation.SetAge(i)
+	return auo
+}
+
+// AddAge adds i to the "age" field.
+func (auo *AccountUpdateOne) AddAge(i int) *AccountUpdateOne {
+	auo.mutation.AddAge(i)
 	return auo
 }
 
@@ -241,6 +281,20 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 			Type:   field.TypeString,
 			Value:  value,
 			Column: account.FieldName,
+		})
+	}
+	if value, ok := auo.mutation.Age(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: account.FieldAge,
+		})
+	}
+	if value, ok := auo.mutation.AddedAge(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: account.FieldAge,
 		})
 	}
 	_node = &Account{config: auo.config}

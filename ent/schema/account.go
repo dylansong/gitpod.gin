@@ -13,7 +13,8 @@ type Account struct {
 // Fields of the Account.
 func (Account) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").StructTag(`form:"name"`),
+		field.String("name").StructTag(`form:"name" binding:"required"`),
+		field.Int("age").StructTag(`form:"age" binding:"required,gte=6,lte=100"`),
 	}
 }
 

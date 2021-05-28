@@ -25,6 +25,12 @@ func (ac *AccountCreate) SetName(s string) *AccountCreate {
 	return ac
 }
 
+// SetAge sets the "age" field.
+func (ac *AccountCreate) SetAge(i int) *AccountCreate {
+	ac.mutation.SetAge(i)
+	return ac
+}
+
 // Mutation returns the AccountMutation object of the builder.
 func (ac *AccountCreate) Mutation() *AccountMutation {
 	return ac.mutation
@@ -79,6 +85,9 @@ func (ac *AccountCreate) check() error {
 	if _, ok := ac.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New("ent: missing required field \"name\"")}
 	}
+	if _, ok := ac.mutation.Age(); !ok {
+		return &ValidationError{Name: "age", err: errors.New("ent: missing required field \"age\"")}
+	}
 	return nil
 }
 
@@ -113,6 +122,14 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 			Column: account.FieldName,
 		})
 		_node.Name = value
+	}
+	if value, ok := ac.mutation.Age(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: account.FieldAge,
+		})
+		_node.Age = value
 	}
 	return _node, _spec
 }
